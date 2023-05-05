@@ -63,7 +63,10 @@ const CreateAccontScreen = () => {
           </Text>
         </View>
         <View style={styles.button}>
-          <CustomButton text="Sign Up" />
+          <CustomButton
+            text="Sign Up"
+            onPress={() => navigation.navigate('Login')}
+          />
         </View>
         <View style={styles.account}>
           <Text style={styles.accountText}>Already have an account? </Text>

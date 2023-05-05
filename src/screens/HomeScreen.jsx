@@ -1,4 +1,11 @@
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  FlatList,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, { useState } from 'react';
 import colors from '../../assets/Theme/colors';
 import HomeScreenModal from '../Components/HomeScreenModal/HomeScreenModal';
@@ -8,6 +15,9 @@ import { useNavigation } from '@react-navigation/native';
 import { Octicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
+import SectionHeader from '../Components/SectionHeaderComponent/SectionHeader';
+import OfferCard from '../Components/OfferCard/OfferCard';
+import offers from '../../assets/Datas/offers';
 
 const HomeScreen = () => {
   const [isModal, setIsModal] = useState(true);
@@ -64,12 +74,22 @@ const HomeScreen = () => {
           </View>
         </TouchableOpacity>
       </View>
-      <View style={styles.Offers}>
-        <Text style={styles.Text1}>Offers</Text>
-        <TouchableOpacity>
-          <Text style={styles.Text2}>View all</Text>
-        </TouchableOpacity>
+      {/*  Offer Section Header */}
+      <SectionHeader title="Offers" />
+      {/* OfferCard */}
+      <View>
+        <FlatList
+          data={offers}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => {
+            return <OfferCard item={item} />;
+          }}
+        />
       </View>
+      {/* Popular Section */}
+      <SectionHeader title="Popular" />
     </View>
   );
 };
@@ -102,21 +122,5 @@ const styles = StyleSheet.create({
   categoryText: {
     fontFamily: 'Pacifico',
     fontSize: 14,
-  },
-  Offers: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 25,
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  Text1: {
-    fontSize: 20,
-    fontFamily: 'Inter',
-  },
-  Text2: {
-    color: colors.pink,
-    fontFamily: 'InterLight',
   },
 });
