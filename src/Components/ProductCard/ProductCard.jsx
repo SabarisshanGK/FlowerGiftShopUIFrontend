@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginLeft: 8,
     fontFamily: 'Pacifico',
+    width: 100,
   },
   price: {
     marginTop: 5,

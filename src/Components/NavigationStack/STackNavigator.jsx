@@ -10,6 +10,10 @@ import CheckEmailScreen from '../../screens/CheckEmailScreen';
 import UpdatePasswordScreen from '../../screens/UpdatePasswordScreen';
 import HomeScreen from '../../screens/HomeScreen';
 import BottomTabs from '../BottomTabNavigation/BottomTabs';
+import FlowerCategoryScreen from '../../screens/FlowerCategoryScreen';
+import GiftCategoryScreen from '../../screens/GiftCategoryScreen';
+import VasesCategoryScreen from '../../screens/VasesCategoryScreen';
+import ProductScreen from '../../screens/ProductScreen';
 
 const STackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -27,7 +31,16 @@ const STackNavigator = () => {
       <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
       <Stack.Screen name="CheckEmail" component={CheckEmailScreen} />
       <Stack.Screen name="UpdatePassword" component={UpdatePasswordScreen} />
-
+      <Stack.Screen
+        name="FlowerCategoryScreen"
+        component={FlowerCategoryScreen}
+      />
+      <Stack.Screen name="GiftCategoryScreen" component={GiftCategoryScreen} />
+      <Stack.Screen
+        name="VasesCategoryScreen"
+        component={VasesCategoryScreen}
+      />
+      <Stack.Screen name="ProductScreen" component={ProductScreen} />
       <Stack.Screen name="Tabs" component={BottomTabs} />
     </Stack.Navigator>
   );

@@ -3,9 +3,11 @@ import React from 'react';
 import Lottie from 'lottie-react-native';
 import { useSelector } from 'react-redux';
 import ProductCard from '../ProductCard/ProductCard';
+import { useNavigation } from '@react-navigation/native';
 
 const RecentlyViewedCard = () => {
   const recentlyViewed = useSelector((state) => state.recent);
+  const navigation = useNavigation();
 
   return (
     <>
@@ -17,7 +19,14 @@ const RecentlyViewedCard = () => {
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={16}
           renderItem={({ item }) => {
-            return <ProductCard item={item} />;
+            return (
+              <ProductCard
+                item={item}
+                onPress={() => {
+                  navigation.navigate('ProductScreen', { Product: item });
+                }}
+              />
+            );
           }}
         />
       ) : (

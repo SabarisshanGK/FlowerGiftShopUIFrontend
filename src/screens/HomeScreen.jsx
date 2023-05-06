@@ -23,11 +23,12 @@ import ProductCard from '../Components/ProductCard/ProductCard';
 import popularProducts from '../../assets/Datas/PopularProducts';
 import { addToRecentlyViewed } from '../../assets/Redux/Actions/RecentlyViewedAction';
 import RecentlyViewedCard from '../Components/RecentlyViewedCard/RecentlyViewedCard';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const HomeScreen = () => {
   const [isModal, setIsModal] = useState(true);
   const dispatch = useDispatch();
+
   const navigation = useNavigation();
   const [fonts] = useFonts({
     AlluraRegular: require('../../assets/fonts/Allura-Regular.ttf'),
@@ -58,7 +59,9 @@ const HomeScreen = () => {
           <CustomTextInput text="Search" />
         </View>
         <View style={styles.categoriesContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('FlowerCategoryScreen')}
+          >
             <View style={styles.category}>
               <MaterialCommunityIcons
                 name="flower-tulip-outline"
@@ -70,7 +73,9 @@ const HomeScreen = () => {
               <Text style={styles.categoryText}>Flowers</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('GiftCategoryScreen')}
+          >
             <View style={styles.category}>
               <Octicons name="gift" size={34} color={colors.pink} />
             </View>
@@ -78,7 +83,9 @@ const HomeScreen = () => {
               <Text style={styles.categoryText}>Gifts</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('VasesCategoryScreen')}
+          >
             <View style={styles.category}>
               <FontAwesome5 name="wine-glass" size={34} color={colors.pink} />
             </View>
@@ -118,7 +125,11 @@ const HomeScreen = () => {
               return (
                 <ProductCard
                   item={item}
-                  onPress={() => dispatch(addToRecentlyViewed(item))}
+                  onPress={() => {
+                    dispatch(addToRecentlyViewed(item));
+
+                    navigation.navigate('ProductScreen', { Product: item });
+                  }}
                 />
               );
             }}
