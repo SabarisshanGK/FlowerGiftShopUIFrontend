@@ -70,7 +70,7 @@ const LoginScreen = () => {
         <View style={styles.button}>
           <CustomButton
             text="Sign In"
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => navigation.navigate('Tabs')}
           />
         </View>
         <View style={styles.account}>

@@ -4,33 +4,29 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import WelcomeScreen from './src/screens/WelcomeScreen';
 import OnBoardSCreen from './src/screens/OnBoardSCreen';
+import { Entypo } from '@expo/vector-icons';
 import CreateAccontScreen from './src/screens/CreateAccontScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import ResetPasswordScreen from './src/screens/ResetPasswordScreen';
 import CheckEmailScreen from './src/screens/CheckEmailScreen';
 import UpdatePasswordScreen from './src/screens/UpdatePasswordScreen';
 import HomeScreen from './src/screens/HomeScreen';
+import BottomTabs from './src/Components/BottomTabNavigation/BottomTabs';
+import STackNavigator from './src/Components/NavigationStack/STackNavigator';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import WishListScreen from './src/screens/WishListScreen';
+import colors from './assets/Theme/colors';
+import { Provider } from 'react-redux';
+import store from './assets/Redux/store';
 
 export default function App() {
-  const Stack = createNativeStackNavigator();
+  const Tab = createBottomTabNavigator();
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-        initialRouteName="Welcome"
-      >
-        <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="Onboard" component={OnBoardSCreen} />
-        <Stack.Screen name="CreateAccount" component={CreateAccontScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
-        <Stack.Screen name="CheckEmail" component={CheckEmailScreen} />
-        <Stack.Screen name="UpdatePassword" component={UpdatePasswordScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <STackNavigator />
+      </NavigationContainer>
+    </Provider>
   );
 }
 

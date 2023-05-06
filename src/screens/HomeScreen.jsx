@@ -1,6 +1,7 @@
 import {
   FlatList,
   Modal,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -18,9 +19,15 @@ import { useFonts } from 'expo-font';
 import SectionHeader from '../Components/SectionHeaderComponent/SectionHeader';
 import OfferCard from '../Components/OfferCard/OfferCard';
 import offers from '../../assets/Datas/offers';
+import ProductCard from '../Components/ProductCard/ProductCard';
+import popularProducts from '../../assets/Datas/PopularProducts';
+import { addToRecentlyViewed } from '../../assets/Redux/Actions/RecentlyViewedAction';
+import RecentlyViewedCard from '../Components/RecentlyViewedCard/RecentlyViewedCard';
+import { useDispatch } from 'react-redux';
 
 const HomeScreen = () => {
   const [isModal, setIsModal] = useState(true);
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [fonts] = useFonts({
     AlluraRegular: require('../../assets/fonts/Allura-Regular.ttf'),
@@ -31,6 +38,7 @@ const HomeScreen = () => {
   if (!fonts) {
     return null;
   }
+
   return (
     <View style={[styles.container, { opacity: isModal ? 0.3 : 1 }]}>
       <Modal
@@ -41,55 +49,88 @@ const HomeScreen = () => {
       >
         <HomeScreenModal modelVisible={isModal} setModelVisible={setIsModal} />
       </Modal>
-      <View style={styles.searchBar}>
-        <CustomTextInput text="Search" />
-      </View>
-      <View style={styles.categoriesContainer}>
-        <TouchableOpacity>
-          <View style={styles.category}>
-            <MaterialCommunityIcons
-              name="flower-tulip-outline"
-              size={44}
-              color={colors.pink}
-            />
-          </View>
-          <View style={{ alignItems: 'center', marginTop: 10 }}>
-            <Text style={styles.categoryText}>Flowers</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <View style={styles.category}>
-            <Octicons name="gift" size={34} color={colors.pink} />
-          </View>
-          <View style={{ alignItems: 'center', marginTop: 10 }}>
-            <Text style={styles.categoryText}>Gifts</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <View style={styles.category}>
-            <FontAwesome5 name="wine-glass" size={34} color={colors.pink} />
-          </View>
-          <View style={{ alignItems: 'center', marginTop: 10 }}>
-            <Text style={styles.categoryText}>Vases</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-      {/*  Offer Section Header */}
-      <SectionHeader title="Offers" />
-      {/* OfferCard */}
-      <View>
-        <FlatList
-          data={offers}
-          keyExtractor={(item) => item.id.toString()}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => {
-            return <OfferCard item={item} />;
-          }}
-        />
-      </View>
-      {/* Popular Section */}
-      <SectionHeader title="Popular" />
+      <ScrollView
+        nestedScrollEnabled={true}
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+      >
+        <View style={styles.searchBar}>
+          <CustomTextInput text="Search" />
+        </View>
+        <View style={styles.categoriesContainer}>
+          <TouchableOpacity>
+            <View style={styles.category}>
+              <MaterialCommunityIcons
+                name="flower-tulip-outline"
+                size={44}
+                color={colors.pink}
+              />
+            </View>
+            <View style={{ alignItems: 'center', marginTop: 10 }}>
+              <Text style={styles.categoryText}>Flowers</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <View style={styles.category}>
+              <Octicons name="gift" size={34} color={colors.pink} />
+            </View>
+            <View style={{ alignItems: 'center', marginTop: 10 }}>
+              <Text style={styles.categoryText}>Gifts</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <View style={styles.category}>
+              <FontAwesome5 name="wine-glass" size={34} color={colors.pink} />
+            </View>
+            <View style={{ alignItems: 'center', marginTop: 10 }}>
+              <Text style={styles.categoryText}>Vases</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        {/*  Offer Section Header */}
+        <SectionHeader title="Offers" />
+        {/* OfferCard */}
+        <View>
+          <FlatList
+            data={offers}
+            keyExtractor={(item) => item.id.toString()}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item }) => {
+              return <OfferCard item={item} />;
+            }}
+          />
+        </View>
+        {/* Popular Section */}
+        <SectionHeader title="Popular" />
+        {/* Popular Product cards */}
+
+        <View>
+          <FlatList
+            data={popularProducts}
+            keyExtractor={(item) => item.id.toString()}
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+            scrollEventThrottle={16}
+            style={{ marginLeft: 8 }}
+            contentContainerStyle={{ gap: 8 }}
+            renderItem={({ item }) => {
+              return (
+                <ProductCard
+                  item={item}
+                  onPress={() => dispatch(addToRecentlyViewed(item))}
+                />
+              );
+            }}
+          />
+        </View>
+        {/* Recently Viewed Section  */}
+        <SectionHeader title="Recently Viewed" />
+        {/* Recently Viewed Cards */}
+        <View>
+          <RecentlyViewedCard />
+        </View>
+      </ScrollView>
     </View>
   );
 };
