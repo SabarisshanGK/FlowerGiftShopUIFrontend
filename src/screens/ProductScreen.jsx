@@ -1,12 +1,15 @@
 import {
+  FlatList,
   Image,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -14,9 +17,21 @@ import colors from '../../assets/Theme/colors';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import CustomButton from '../Components/CustomButton';
+import Products from '../../assets/Datas/Products';
+import ProductCard from '../Components/ProductCard/ProductCard';
+import ShareModal from '../Components/ShareModal/ShareModal';
+import { addToRecentlyViewed } from '../../assets/Redux/Actions/RecentlyViewedAction';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ProductScreen = ({ route }) => {
   const data = route.params.Product;
+  const [ctg, setCtg] = useState(
+    Products.filter(
+      (item) => item.category == data.category && item.id != data.id
+    )
+  );
+  const [isModal, setIsModal] = useState(false);
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [fonts] = useFonts({
     AlluraRegular: require('../../assets/fonts/Allura-Regular.ttf'),
@@ -30,12 +45,23 @@ const ProductScreen = ({ route }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { opacity: isModal ? 0.4 : 1 }]}>
+      {/*  share model */}
+
+      <Modal
+        visible={isModal}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setIsModal(!isModal)}
+      >
+        <ShareModal isModal={isModal} setIsModal={setIsModal} />
+      </Modal>
+
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Feather name="chevron-left" size={44} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => setIsModal(!isModal)}>
           <FontAwesome5 name="share" size={24} color="black" />
         </TouchableOpacity>
       </View>
@@ -107,6 +133,32 @@ const ProductScreen = ({ route }) => {
 
         <View style={{ alignItems: 'center', marginTop: 20 }}>
           <CustomButton text="Add To Cart" />
+        </View>
+        {/* Suggestion Section */}
+
+        <View>
+          <Text style={styles.suggestionText}>You Might Also Like</Text>
+          <View>
+            <FlatList
+              data={ctg}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              scrollEventThrottle={16}
+              renderItem={({ item }) => {
+                return (
+                  <ProductCard
+                    item={item}
+                    onPress={() => {
+                      dispatch(
+                        addToRecentlyViewed(item),
+                        navigation.navigate('ProductScreen', { Product: item })
+                      );
+                    }}
+                  />
+                );
+              }}
+            />
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -222,5 +274,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 20,
     borderRadius: 10,
+  },
+  suggestionText: {
+    marginTop: 20,
+    marginLeft: 10,
+    fontSize: 20,
+    fontFamily: 'Inter',
   },
 });
