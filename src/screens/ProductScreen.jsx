@@ -24,6 +24,7 @@ import ShareModal from '../Components/ShareModal/ShareModal';
 import { addToRecentlyViewed } from '../../assets/Redux/Actions/RecentlyViewedAction';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToWishList } from '../../assets/Redux/Actions/WishListAction';
+import { addToCart } from '../../assets/Redux/Actions/CartAction';
 
 const ProductScreen = ({ route }) => {
   const data = route.params.Product;
@@ -34,7 +35,7 @@ const ProductScreen = ({ route }) => {
   );
   const [isModal, setIsModal] = useState(false);
   const wishlist = useSelector((state) => state.wishlist);
-
+  const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [fonts] = useFonts({
@@ -144,7 +145,10 @@ const ProductScreen = ({ route }) => {
         {/* Add to cart button */}
 
         <View style={{ alignItems: 'center', marginTop: 20 }}>
-          <CustomButton text="Add To Cart" />
+          <CustomButton
+            text={cart.includes(data) ? 'Remove From Cart' : 'Add To Cart'}
+            onPress={() => dispatch(addToCart(data))}
+          />
         </View>
         {/* Suggestion Section */}
 

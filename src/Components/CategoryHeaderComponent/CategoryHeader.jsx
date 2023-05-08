@@ -5,7 +5,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
 
-const CategoryHeader = ({ title }) => {
+const CategoryHeader = ({ title, onPress }) => {
   const navigation = useNavigation();
   const [fonts] = useFonts({
     AlluraRegular: require('../../../assets/fonts/Allura-Regular.ttf'),
@@ -28,7 +28,7 @@ const CategoryHeader = ({ title }) => {
         <TouchableOpacity>
           <FontAwesome5 name="sliders-h" size={24} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onPress}>
           <FontAwesome5 name="shopping-cart" size={24} color="black" />
         </TouchableOpacity>
       </View>

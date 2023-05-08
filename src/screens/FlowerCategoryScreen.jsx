@@ -17,7 +17,10 @@ const FlowerCategoryScreen = () => {
     <View style={styles.container}>
       {/* Category Header */}
       <View>
-        <CategoryHeader title="Flowers" />
+        <CategoryHeader
+          title="Flowers"
+          onPress={() => navigation.navigate('CartScreen')}
+        />
       </View>
 
       {/* Products of Category Flowers */}
