@@ -24,11 +24,13 @@ import popularProducts from '../../assets/Datas/PopularProducts';
 import { addToRecentlyViewed } from '../../assets/Redux/Actions/RecentlyViewedAction';
 import RecentlyViewedCard from '../Components/RecentlyViewedCard/RecentlyViewedCard';
 import { useDispatch, useSelector } from 'react-redux';
+import { addToWishList } from '../../assets/Redux/Actions/WishListAction';
 
 const HomeScreen = () => {
   const [isModal, setIsModal] = useState(true);
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
+  const wishlist = useSelector((state) => state.wishlist);
   const navigation = useNavigation();
   const [fonts] = useFonts({
     AlluraRegular: require('../../assets/fonts/Allura-Regular.ttf'),
@@ -128,7 +130,12 @@ const HomeScreen = () => {
                   onPress={() => {
                     dispatch(addToRecentlyViewed(item));
 
-                    navigation.navigate('ProductScreen', { Product: item });
+                    navigation.navigate('ProductScreen', {
+                      Product: item,
+                    });
+                  }}
+                  onWishList={() => {
+                    dispatch(addToWishList(item));
                   }}
                 />
               );

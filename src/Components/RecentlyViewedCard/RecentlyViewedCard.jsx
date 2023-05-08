@@ -1,12 +1,15 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import Lottie from 'lottie-react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ProductCard from '../ProductCard/ProductCard';
 import { useNavigation } from '@react-navigation/native';
+import { addToWishList } from '../../../assets/Redux/Actions/WishListAction';
 
-const RecentlyViewedCard = () => {
+const RecentlyViewedCard = ({ isWishList, onWishList, setIsWishList }) => {
   const recentlyViewed = useSelector((state) => state.recent);
+  const wishlist = useSelector((state) => state.wishlist);
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   return (
@@ -24,6 +27,10 @@ const RecentlyViewedCard = () => {
                 item={item}
                 onPress={() => {
                   navigation.navigate('ProductScreen', { Product: item });
+                }}
+                //isWishList={wishlist.includes(item)}
+                onWishList={() => {
+                  dispatch(addToWishList(item));
                 }}
               />
             );

@@ -13,6 +13,7 @@ import React, { useState } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import colors from '../../assets/Theme/colors';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -22,6 +23,7 @@ import ProductCard from '../Components/ProductCard/ProductCard';
 import ShareModal from '../Components/ShareModal/ShareModal';
 import { addToRecentlyViewed } from '../../assets/Redux/Actions/RecentlyViewedAction';
 import { useDispatch, useSelector } from 'react-redux';
+import { addToWishList } from '../../assets/Redux/Actions/WishListAction';
 
 const ProductScreen = ({ route }) => {
   const data = route.params.Product;
@@ -31,6 +33,8 @@ const ProductScreen = ({ route }) => {
     )
   );
   const [isModal, setIsModal] = useState(false);
+  const wishlist = useSelector((state) => state.wishlist);
+
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [fonts] = useFonts({
@@ -72,8 +76,16 @@ const ProductScreen = ({ route }) => {
         <View style={styles.NameSectionContainer}>
           <View style={styles.NameSection}>
             <Text style={styles.name}>{data.productName}</Text>
-            <TouchableOpacity>
-              <FontAwesome5 name="heart" size={24} color={colors.pink} />
+            <TouchableOpacity
+              onPress={() => {
+                dispatch(addToWishList(data));
+              }}
+            >
+              <AntDesign
+                name={wishlist.includes(data) ? 'heart' : 'hearto'}
+                size={24}
+                color={colors.pink}
+              />
             </TouchableOpacity>
           </View>
           <View style={styles.circleContainer}>

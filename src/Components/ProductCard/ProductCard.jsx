@@ -3,8 +3,10 @@ import React from 'react';
 import colors from '../../../assets/Theme/colors';
 import { AntDesign } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
+import { useSelector } from 'react-redux';
 
-const ProductCard = ({ onPress, onWishList, item }) => {
+const ProductCard = ({ onPress, onWishList, item, isWishList }) => {
+  const wishlist = useSelector((state) => state.wishlist);
   const [fonts] = useFonts({
     Pacifico: require('../../../assets/fonts/Pacifico-Regular.ttf'),
     Inter: require('../../../assets/fonts/Inter-Regular.ttf'),
@@ -23,7 +25,11 @@ const ProductCard = ({ onPress, onWishList, item }) => {
           <Text style={styles.price}>₹ {item.price}</Text>
         </View>
         <TouchableOpacity onPress={onWishList}>
-          <AntDesign name="hearto" size={24} color={colors.pink} />
+          <AntDesign
+            name={wishlist.includes(item) ? 'heart' : 'hearto'}
+            size={24}
+            color={colors.pink}
+          />
         </TouchableOpacity>
       </View>
     </TouchableOpacity>

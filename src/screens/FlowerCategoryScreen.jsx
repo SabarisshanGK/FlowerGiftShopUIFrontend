@@ -5,11 +5,13 @@ import CategoryHeader from '../Components/CategoryHeaderComponent/CategoryHeader
 import { useNavigation } from '@react-navigation/native';
 import Products from '../../assets/Datas/Products';
 import ProductCard from '../Components/ProductCard/ProductCard';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToRecentlyViewed } from '../../assets/Redux/Actions/RecentlyViewedAction';
+import { addToWishList } from '../../assets/Redux/Actions/WishListAction';
 
 const FlowerCategoryScreen = () => {
   const navigation = useNavigation();
+  const wishlist = useSelector((state) => state.wishlist);
   const dispatch = useDispatch();
   return (
     <View style={styles.container}>
@@ -36,6 +38,8 @@ const FlowerCategoryScreen = () => {
                       dispatch(addToRecentlyViewed(item));
                       navigation.navigate('ProductScreen', { Product: item });
                     }}
+                    //isWishList={wishlist.includes(item)}
+                    onWishList={() => dispatch(addToWishList(item))}
                   />
                 ) : null}
               </>
