@@ -25,7 +25,10 @@ const OrderConfirmationScreen = () => {
       <Text style={{ fontSize: 18, fontWeight: '300', marginBottom: 30 }}>
         Est. delivery time: 30 min
       </Text>
-      <CustomButton text="Track Your Order" />
+      <CustomButton
+        text="Track Your Order"
+        onPress={() => navigation.navigate('TrackOrder')}
+      />
       <View style={{ marginTop: 20 }}>
         <CustomButton
           text="Return Home"

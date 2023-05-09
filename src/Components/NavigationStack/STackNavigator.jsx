@@ -16,6 +16,7 @@ import VasesCategoryScreen from '../../screens/VasesCategoryScreen';
 import ProductScreen from '../../screens/ProductScreen';
 import OrderConfirmationScreen from '../../screens/OrderConfirmationScreen';
 import CheckoutScreen from '../../screens/CheckoutScreen';
+import TrackOrderScreen from '../../screens/TrackOrderScreen';
 
 const STackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -34,6 +35,7 @@ const STackNavigator = () => {
       <Stack.Screen name="CheckEmail" component={CheckEmailScreen} />
       <Stack.Screen name="UpdatePassword" component={UpdatePasswordScreen} />
       <Stack.Screen name="CheckOut" component={CheckoutScreen} />
+      <Stack.Screen name="TrackOrder" component={TrackOrderScreen} />
       <Stack.Screen
         name="OrderConfirmation"
         component={OrderConfirmationScreen}
