@@ -14,10 +14,12 @@ import { Entypo } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { Image } from 'react-native';
 import { removeFromCart } from '../../assets/Redux/Actions/CartAction';
+import { useNavigation } from '@react-navigation/native';
 
 const CartScreen = () => {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const [fonts] = useFonts({
     Inter: require('../../assets/fonts/Inter-Regular.ttf'),
     Pacifico: require('../../assets/fonts/Pacifico-Regular.ttf'),
@@ -115,7 +117,15 @@ const CartScreen = () => {
           <Text style={[styles.priceText, { marginRight: 20 }]}>₹ {total}</Text>
         </View>
         <View style={{ marginLeft: 80, marginTop: 20, marginBottom: 20 }}>
-          <CustomButton text="Check Out" />
+          <CustomButton
+            text="Check Out"
+            onPress={() =>
+              navigation.navigate('CheckOut', {
+                total: total,
+                totalItems: cart.length,
+              })
+            }
+          />
         </View>
       </View>
     </View>

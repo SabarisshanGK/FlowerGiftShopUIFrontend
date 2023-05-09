@@ -14,6 +14,8 @@ import FlowerCategoryScreen from '../../screens/FlowerCategoryScreen';
 import GiftCategoryScreen from '../../screens/GiftCategoryScreen';
 import VasesCategoryScreen from '../../screens/VasesCategoryScreen';
 import ProductScreen from '../../screens/ProductScreen';
+import OrderConfirmationScreen from '../../screens/OrderConfirmationScreen';
+import CheckoutScreen from '../../screens/CheckoutScreen';
 
 const STackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -31,6 +33,11 @@ const STackNavigator = () => {
       <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
       <Stack.Screen name="CheckEmail" component={CheckEmailScreen} />
       <Stack.Screen name="UpdatePassword" component={UpdatePasswordScreen} />
+      <Stack.Screen name="CheckOut" component={CheckoutScreen} />
+      <Stack.Screen
+        name="OrderConfirmation"
+        component={OrderConfirmationScreen}
+      />
       <Stack.Screen
         name="FlowerCategoryScreen"
         component={FlowerCategoryScreen}
