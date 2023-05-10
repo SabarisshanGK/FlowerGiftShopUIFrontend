@@ -25,6 +25,7 @@ import { addToRecentlyViewed } from '../../assets/Redux/Actions/RecentlyViewedAc
 import RecentlyViewedCard from '../Components/RecentlyViewedCard/RecentlyViewedCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToWishList } from '../../assets/Redux/Actions/WishListAction';
+import { SharedElement } from 'react-navigation-shared-element';
 
 const HomeScreen = () => {
   const [isModal, setIsModal] = useState(true);

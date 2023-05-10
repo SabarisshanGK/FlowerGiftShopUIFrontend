@@ -25,12 +25,14 @@ import { addToRecentlyViewed } from '../../assets/Redux/Actions/RecentlyViewedAc
 import { useDispatch, useSelector } from 'react-redux';
 import { addToWishList } from '../../assets/Redux/Actions/WishListAction';
 import { addToCart } from '../../assets/Redux/Actions/CartAction';
+import * as Animatable from 'react-native-animatable';
+import { SharedElement } from 'react-navigation-shared-element';
 
 const ProductScreen = ({ route }) => {
-  const data = route.params.Product;
+  const item = route.params.Product;
   const [ctg, setCtg] = useState(
     Products.filter(
-      (item) => item.category == data.category && item.id != data.id
+      (item) => item.category == item.category && item.id != item.id
     )
   );
   const [isModal, setIsModal] = useState(false);
@@ -48,137 +50,251 @@ const ProductScreen = ({ route }) => {
   if (!fonts) {
     return null;
   }
+  const DURATION = 400;
+  const animation1 = {
+    0: { opacity: 0, translateY: -100 },
+    1: { opacity: 1, translateY: 0 },
+  };
+  const animation2 = {
+    0: { opacity: 0, translateY: 100 },
+    1: { opacity: 1, translateY: 0 },
+  };
+
+  const titleAnimation = {
+    0: { opacity: 0, translateX: -100 },
+    1: { opacity: 1, translateX: 0 },
+  };
+
+  const circleAnimation = {
+    0: { opacity: 0, translateX: 100 },
+    1: { opacity: 1, translateX: 0 },
+  };
 
   return (
     <View style={[styles.container, { opacity: isModal ? 0.4 : 1 }]}>
       {/*  share model */}
+      <SharedElement id="general">
+        <Modal
+          visible={isModal}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={() => setIsModal(!isModal)}
+        >
+          <ShareModal isModal={isModal} setIsModal={setIsModal} />
+        </Modal>
 
-      <Modal
-        visible={isModal}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setIsModal(!isModal)}
-      >
-        <ShareModal isModal={isModal} setIsModal={setIsModal} />
-      </Modal>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Feather name="chevron-left" size={44} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setIsModal(!isModal)}>
+            <FontAwesome5 name="share" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+        <ScrollView
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={false}
+        >
+          <SharedElement id={item.image}>
+            <Image
+              source={item.image}
+              resizeMode="cover"
+              style={styles.image}
+            />
+          </SharedElement>
+          {/* Name Section */}
 
-      <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Feather name="chevron-left" size={44} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setIsModal(!isModal)}>
-          <FontAwesome5 name="share" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
-      <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
-        <Image source={data.image} resizeMode="cover" style={styles.image} />
-        {/* Name Section */}
+          <View style={styles.NameSectionContainer}>
+            <View style={styles.NameSection}>
+              <SharedElement id={item.productName}>
+                <Animatable.Text
+                  style={styles.name}
+                  animation={titleAnimation}
+                  delay={DURATION * 2 + 300}
+                  useNativeDriver
+                >
+                  {item.productName}
+                </Animatable.Text>
+              </SharedElement>
+              <Animatable.View
+                animation={titleAnimation}
+                useNativeDriver={true}
+                delay={DURATION + 500}
+              >
+                <TouchableOpacity
+                  onPress={() => {
+                    dispatch(addToWishList(item));
+                  }}
+                >
+                  <AntDesign
+                    name={wishlist.includes(item) ? 'heart' : 'hearto'}
+                    size={24}
+                    color={colors.pink}
+                  />
+                </TouchableOpacity>
+              </Animatable.View>
+            </View>
+            <View style={styles.circleContainer}>
+              <Animatable.View
+                style={styles.circle1}
+                animation={circleAnimation}
+                useNativeDriver={true}
+                delay={DURATION + 600}
+              ></Animatable.View>
+              <Animatable.View
+                style={styles.circle2}
+                animation={circleAnimation}
+                useNativeDriver={true}
+                delay={DURATION + 800}
+              ></Animatable.View>
+              <Animatable.View
+                style={styles.circle3}
+                animation={circleAnimation}
+                useNativeDriver={true}
+                delay={DURATION + 1000}
+              ></Animatable.View>
+            </View>
+          </View>
 
-        <View style={styles.NameSectionContainer}>
-          <View style={styles.NameSection}>
-            <Text style={styles.name}>{data.productName}</Text>
-            <TouchableOpacity
-              onPress={() => {
-                dispatch(addToWishList(data));
-              }}
+          {/* Price Section */}
+
+          <View style={styles.PriceSection}>
+            <SharedElement id={item.price}>
+              <Animatable.Text
+                style={styles.priceText}
+                animation={animation1}
+                useNativeDriver={true}
+                delay={DURATION + 100}
+              >
+                ₹{item.price}
+              </Animatable.Text>
+            </SharedElement>
+            <Animatable.View
+              style={styles.ratingContainer}
+              animation={animation1}
+              useNativeDriver
+              delay={DURATION + 100}
             >
-              <AntDesign
-                name={wishlist.includes(data) ? 'heart' : 'hearto'}
-                size={24}
-                color={colors.pink}
-              />
-            </TouchableOpacity>
+              <FontAwesome name="star" size={18} color={colors.yellow} />
+              <Text style={styles.ratingText}>( 4.5 )</Text>
+            </Animatable.View>
           </View>
-          <View style={styles.circleContainer}>
-            <View style={styles.circle1}></View>
-            <View style={styles.circle2}></View>
-            <View style={styles.circle3}></View>
-          </View>
-        </View>
 
-        {/* Price Section */}
+          {/* Description Section */}
 
-        <View style={styles.PriceSection}>
-          <Text style={styles.priceText}>₹{data.price}</Text>
-          <View style={styles.ratingContainer}>
-            <FontAwesome name="star" size={18} color={colors.yellow} />
-            <Text style={styles.ratingText}>( 4.5 )</Text>
-          </View>
-        </View>
-
-        {/* Description Section */}
-
-        <View style={styles.descriptionContainer}>
-          <Text style={styles.descriptionHeader}>Description</Text>
-          <Text style={styles.description}>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nisi modi
-            et impedit amet quos, ratione repellendus dicta dolor doloremque
-            dolorem repudiandae culpa ea eveniet incidunt voluptate suscipit
-            excepturi illum aperiam?
-          </Text>
-        </View>
-
-        {/* Reviews */}
-
-        <View style={styles.reviewContainer}>
-          <Text style={styles.descriptionHeader}>Reviews</Text>
-          <View style={styles.ratingCard}>
-            <View
-              style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
+          <View style={styles.descriptionContainer}>
+            <Animatable.Text
+              style={styles.descriptionHeader}
+              animation={animation2}
+              useNativeDriver={true}
+              delay={DURATION + 200}
             >
-              <Text style={{ fontSize: 18, fontWeight: '600' }}>4.5/5</Text>
-              <View style={{ flexDirection: 'row', gap: 5 }}>
-                <FontAwesome name="star" size={18} color={colors.yellow} />
-                <FontAwesome name="star" size={18} color={colors.yellow} />
-                <FontAwesome name="star" size={18} color={colors.yellow} />
-                <FontAwesome name="star" size={18} color={colors.yellow} />
-                <FontAwesome
-                  name="star-half-full"
-                  size={18}
-                  color={colors.yellow}
-                />
+              Description
+            </Animatable.Text>
+            <Animatable.Text
+              style={styles.description}
+              animation={animation2}
+              delay={DURATION + 300}
+              useNativeDriver
+            >
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nisi
+              modi et impedit amet quos, ratione repellendus dicta dolor
+              doloremque dolorem repudiandae culpa ea eveniet incidunt voluptate
+              suscipit excepturi illum aperiam?
+            </Animatable.Text>
+          </View>
+
+          {/* Reviews */}
+
+          <View style={styles.reviewContainer}>
+            <Text style={styles.descriptionHeader}>Reviews</Text>
+            <View style={styles.ratingCard}>
+              <View
+                style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
+              >
+                <Text style={{ fontSize: 18, fontWeight: '600' }}>4.5/5</Text>
+                <View style={{ flexDirection: 'row', gap: 5 }}>
+                  <FontAwesome name="star" size={18} color={colors.yellow} />
+                  <FontAwesome name="star" size={18} color={colors.yellow} />
+                  <FontAwesome name="star" size={18} color={colors.yellow} />
+                  <FontAwesome name="star" size={18} color={colors.yellow} />
+                  <FontAwesome
+                    name="star-half-full"
+                    size={18}
+                    color={colors.yellow}
+                  />
+                </View>
               </View>
             </View>
           </View>
-        </View>
 
-        {/* Add to cart button */}
+          {/* Add to cart button */}
 
-        <View style={{ alignItems: 'center', marginTop: 20 }}>
-          <CustomButton
-            text={cart.includes(data) ? 'Remove From Cart' : 'Add To Cart'}
-            onPress={() => dispatch(addToCart(data))}
-          />
-        </View>
-        {/* Suggestion Section */}
-
-        <View>
-          <Text style={styles.suggestionText}>You Might Also Like</Text>
-          <View>
-            <FlatList
-              data={ctg}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              scrollEventThrottle={16}
-              renderItem={({ item }) => {
-                return (
-                  <ProductCard
-                    item={item}
-                    onPress={() => {
-                      dispatch(
-                        addToRecentlyViewed(item),
-                        navigation.navigate('ProductScreen', { Product: item })
-                      );
-                    }}
-                  />
-                );
-              }}
+          <View style={{ alignItems: 'center', marginTop: 20 }}>
+            <CustomButton
+              text={cart.includes(item) ? 'Remove From Cart' : 'Add To Cart'}
+              onPress={() => dispatch(addToCart(item))}
             />
           </View>
-        </View>
-      </ScrollView>
+          {/* Suggestion Section */}
+
+          <View>
+            <Text style={styles.suggestionText}>You Might Also Like</Text>
+            <View>
+              <FlatList
+                data={ctg}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                scrollEventThrottle={16}
+                renderItem={({ item }) => {
+                  return (
+                    <ProductCard
+                      item={item}
+                      onPress={() => {
+                        dispatch(
+                          addToRecentlyViewed(item),
+                          navigation.navigate('ProductScreen', {
+                            Product: item,
+                          })
+                        );
+                      }}
+                    />
+                  );
+                }}
+              />
+            </View>
+          </View>
+        </ScrollView>
+      </SharedElement>
     </View>
   );
+};
+
+ProductScreen.sharedElements = (route, otherRoute, showing) => {
+  const item = route.params.Product;
+
+  return [
+    {
+      id: item.image,
+      animation: 'move',
+      resize: 'clip',
+    },
+    {
+      id: item.productName,
+      animation: 'move',
+      resize: 'clip',
+    },
+    {
+      id: item.price,
+      animation: 'move',
+      resize: 'clip',
+    },
+    {
+      id: 'general',
+      animation: 'move',
+      resize: 'clip',
+    },
+  ];
 };
 
 export default ProductScreen;

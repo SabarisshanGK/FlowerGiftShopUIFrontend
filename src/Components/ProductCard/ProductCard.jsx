@@ -4,6 +4,7 @@ import colors from '../../../assets/Theme/colors';
 import { AntDesign } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import { useSelector } from 'react-redux';
+import { SharedElement } from 'react-navigation-shared-element';
 
 const ProductCard = ({ onPress, onWishList, item, isWishList }) => {
   const wishlist = useSelector((state) => state.wishlist);
@@ -17,12 +18,18 @@ const ProductCard = ({ onPress, onWishList, item, isWishList }) => {
   }
   return (
     <TouchableOpacity style={styles.cardContainer} onPress={onPress}>
-      <Image source={item.image} style={styles.Image} resizeMode="cover" />
+      <SharedElement id={item.image}>
+        <Image source={item.image} style={styles.Image} resizeMode="cover" />
+      </SharedElement>
       {/* price Section */}
       <View style={styles.PriceContainer}>
         <View>
-          <Text style={styles.productName}>{item.productName}</Text>
-          <Text style={styles.price}>₹ {item.price}</Text>
+          <SharedElement id={item.productName}>
+            <Text style={styles.productName}>{item.productName}</Text>
+          </SharedElement>
+          <SharedElement id={item.price}>
+            <Text style={styles.price}>₹ {item.price}</Text>
+          </SharedElement>
         </View>
         <TouchableOpacity onPress={onWishList}>
           <AntDesign

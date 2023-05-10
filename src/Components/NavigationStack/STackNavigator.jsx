@@ -17,9 +17,10 @@ import ProductScreen from '../../screens/ProductScreen';
 import OrderConfirmationScreen from '../../screens/OrderConfirmationScreen';
 import CheckoutScreen from '../../screens/CheckoutScreen';
 import TrackOrderScreen from '../../screens/TrackOrderScreen';
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 
 const STackNavigator = () => {
-  const Stack = createNativeStackNavigator();
+  const Stack = createSharedElementStackNavigator();
   return (
     <Stack.Navigator
       screenOptions={{
