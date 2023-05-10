@@ -290,9 +290,7 @@ ProductScreen.sharedElements = (route, otherRoute, showing) => {
       resize: 'clip',
     },
     {
-      id: 'general',
-      animation: 'move',
-      resize: 'clip',
+      id: item.general,
     },
   ];
 };

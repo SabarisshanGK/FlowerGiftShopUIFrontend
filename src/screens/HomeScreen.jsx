@@ -126,19 +126,21 @@ const HomeScreen = () => {
             contentContainerStyle={{ gap: 8 }}
             renderItem={({ item }) => {
               return (
-                <ProductCard
-                  item={item}
-                  onPress={() => {
-                    dispatch(addToRecentlyViewed(item));
+                <SharedElement id={item.general}>
+                  <ProductCard
+                    item={item}
+                    onPress={() => {
+                      dispatch(addToRecentlyViewed(item));
 
-                    navigation.navigate('ProductScreen', {
-                      Product: item,
-                    });
-                  }}
-                  onWishList={() => {
-                    dispatch(addToWishList(item));
-                  }}
-                />
+                      navigation.navigate('ProductScreen', {
+                        Product: item,
+                      });
+                    }}
+                    onWishList={() => {
+                      dispatch(addToWishList(item));
+                    }}
+                  />
+                </SharedElement>
               );
             }}
           />
